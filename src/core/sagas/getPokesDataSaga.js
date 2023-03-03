@@ -1,22 +1,12 @@
 import { all, put, takeEvery, call, select } from 'redux-saga/effects'
 import * as actions from '../actions/getPokesDataAction'
+import httpProvider from '../../common/httpProvider'
 
 const HANDLERS = {
   *[actions.getPokesData]() {
-    function fetchData() {
-        return  fetch('https://pokeapi.co/api/v2/pokemon')
-          .then((response) => {
-            if (response.ok) {
-              return response.json()
-            }
-            throw new Error('Something went wrong')
-          })
-          .catch((error) => {
-            console.log(error)
-          }) 
-    }
+
     try {
-      const data = yield call(fetchData)
+      const { data } = yield call(httpProvider.get, 'https://pokeapi.co/api/v2/pokemon')
       yield put(actions.getPokesDataSuccess(data.results))
     } catch (error) {
       console.log(error)

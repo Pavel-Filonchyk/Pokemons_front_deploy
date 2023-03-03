@@ -20,7 +20,6 @@ const HANDLERS = {
     }
     try {
       const data = yield call(fetchData)
-      console.log(data)
       const pokes = data.map(item => {
         return [item.name, item.sprites.front_default ]
       })
