@@ -99,6 +99,7 @@ export default function Main() {
   const closeAlert = () => {
     setShowAlert(false)
     navigate("/Likes-Poke")
+    dispatch(postLikePokes())
   }
 
   const dataSource = pokemons?.map(items => {
