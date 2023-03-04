@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Table, Modal, Input, Button } from 'antd'
 import { StarOutlined } from '@ant-design/icons'
-import {Link} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 
 import { getPokes } from '../../core/actions/getPokesAction'
@@ -95,8 +95,10 @@ export default function Main() {
   const onShowAlert = () => {
     setShowAlert(true)
   }
+  const navigate = useNavigate()
   const closeAlert = () => {
     setShowAlert(false)
+    navigate("/Likes-Poke")
   }
 
   const dataSource = pokemons?.map(items => {
@@ -196,10 +198,10 @@ export default function Main() {
         width={300}
         mask={true}
         onCancel={closeModalAlert}
-        bodyStyle={{ height: 180, padding: 0, borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
+        bodyStyle={{ height: 200, padding: 0, borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
         >
         <div className={style.wrapAlert}> 
-          <span>Вы не авторизованы <br/> Авторизуйтесь и вы сможете посмотреть любимых покемонов</span><br/>
+          <span>Вы не авторизованы <br/> Однако функция авторизации работает некорректно и вы можете посмотреть любимых покемонов без нее</span><br/>
           <div style={{width: '100%'}}>
             <Button type="primary" 
               onClick={() => closeAlert()}
