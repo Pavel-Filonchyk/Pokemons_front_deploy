@@ -30,3 +30,16 @@
 		font-weight: 500;
 	}
 }
+.star {
+	cursor: 'pointer';
+	animation: scaling 2s;
+	color: red
+}
+@keyframes scaling {
+	From {
+		-webkit-transform: scale(1.0);
+	}
+	To {
+		-webkit-transform: scale(2.0);
+	}
+  }

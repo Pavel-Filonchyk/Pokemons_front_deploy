@@ -166,7 +166,7 @@ export default function Main() {
           },
           { dataIndex: 'star', key: 'star', title: 'Star',
             render: (value, record, inx) =>
-            <div style={{cursor: 'pointer', color: star?.find(item => item.name === record.name) ? 'red' : ''}}
+            <div className={star?.find(item => item.name === record.name) ? style.star : ''}
               onClick={() => onAddStar(value, record, inx)}
             ><StarOutlined style={{fontSize: 20}}/></div>
           },
