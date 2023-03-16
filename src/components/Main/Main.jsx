@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Table, Modal, Input, Button } from 'antd'
 import { StarOutlined } from '@ant-design/icons'
@@ -18,7 +18,7 @@ export default function Main() {
   const pokemons = useSelector(({ getPokes: { pokes } }) => pokes)
   const star = useSelector(({ addStar: { star } }) => star)
   const token = useSelector(({ postOauth: { oauth } }) => oauth)
-  console.log(star)
+
   const [showPoke, setShowPoke] = useState(null)
   const [filterPoke, setFilterPoke] = useState(null)
   const [foundPoke, setFoundPoke] = useState([])
@@ -36,13 +36,13 @@ export default function Main() {
   }, [pokesData])
 
   useEffect(() => {
-    const filter = pokemons.filter(item => item[0] === filterPoke)
+    const filter = pokemons?.filter(item => item.name === filterPoke)
     setFoundPoke(filter)
   }, [filterPoke])
 
   useEffect(() => {
-    if(foundPoke.length >= 1){
-      setShowPoke([foundPoke?.[0]?.[0], foundPoke?.[0]?.[1]])
+    if(foundPoke?.length >= 1){
+      setShowPoke(foundPoke)
     }
   }, [foundPoke])
 
@@ -57,34 +57,11 @@ export default function Main() {
     setShowPoke([record.name, record.icon.props.src])
   }
 
-  const ref = useRef()
-  const closeModalPreview = (event) => {
-    const domNode = ref.current
-    if (!domNode || !domNode.contains(event.target)) {
-      setShowPoke(null)
-    }
-  }
-  const closeModalOauth = (event) => {
-    const domNode = ref.current
-    if (!domNode || !domNode.contains(event.target)) {
-      setShowOauth(false)
-    }
-  }
-  const closeModalAlert = (event) => {
-    const domNode = ref.current
-    if (!domNode || !domNode.contains(event.target)) {
-      setShowAlert(false)
-    }
-  }
-
   const onChangeInput = (e) => {
     setFilterPoke(e.target.value)
   }
 
   const onAddStar = (value, record, inx) => {
-    if(token){
-
-    }
     dispatch(addStar({name: record.name, url: record.icon.props.src}))
   }
 
@@ -92,9 +69,6 @@ export default function Main() {
     dispatch(postLikePokes())
   }
   
-  const onShowAlert = () => {
-    setShowAlert(true)
-  }
   const navigate = useNavigate()
   const closeAlert = () => {
     setShowAlert(false)
@@ -122,7 +96,6 @@ export default function Main() {
         <GoogleLogin
           onSuccess={credentialResponse => {
             dispatch(postOauth(credentialResponse))
-            //console.log(credentialResponse)
             if(credentialResponse){
               setShowOauth(false)
             }
@@ -130,7 +103,6 @@ export default function Main() {
           onError={() => {
             console.log('Login Failed')
           }}
-          //useOneTap
         />
         {
           token ? <Link to="/Likes-Poke" style={{textDecoration: 'none'}}>
@@ -142,7 +114,7 @@ export default function Main() {
             </div>
           </Link> 
           :  <div className={style.wrapStar}
-              onClick={() => onShowAlert()}
+              onClick={() => setShowAlert(true)}
              >
               <StarOutlined style={{fontSize: 25}}/>
               <span>Любимые покемоны</span>
@@ -182,13 +154,13 @@ export default function Main() {
         centered={true}
         width={300}
         mask={true}
-        onCancel={closeModalPreview}
+        onCancel={() => setShowPoke(null)}
         maskStyle={{ background: 'rgba(235, 90, 30, 0.3)' }}
         bodyStyle={{ height: 250, padding: 0, borderRadius: '10px'}}
         >
         <div className={style.poke} >
-          <div className={style.poke} style={{background: `url(${showPoke?.[1]}) center center/cover no-repeat`, height: "200px", width: "200px"}}></div>
-          <h2>{showPoke?.[0]}</h2>
+          <div className={style.poke} style={{background: `url(${showPoke?.[0]?.icon}) center center/cover no-repeat`, height: "200px", width: "200px"}}></div>
+          <h2>{showPoke?.[0]?.name}</h2>
         </div>
       </Modal>
       <Modal
@@ -198,7 +170,7 @@ export default function Main() {
         centered={true}
         width={300}
         mask={true}
-        onCancel={closeModalAlert}
+        onCancel={() => setShowAlert(false)}
         bodyStyle={{ height: 200, padding: 0, borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
         >
         <div className={style.wrapAlert}> 
@@ -217,13 +189,12 @@ export default function Main() {
         centered={true}
         width={300}
         mask={true}
-        onCancel={closeModalOauth}
+        onCancel={()=> setShowOauth(false)}
         bodyStyle={{ height: 150, padding: 0, borderRadius: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}
         >
         <GoogleLogin
           onSuccess={credentialResponse => {
             dispatch(postOauth(credentialResponse))
-            //console.log(credentialResponse)
             if(credentialResponse){
               setShowOauth(false)
             }
@@ -231,7 +202,6 @@ export default function Main() {
           onError={() => {
             console.log('Login Failed')
           }}
-          //useOneTap
         />
       </Modal>
     </>

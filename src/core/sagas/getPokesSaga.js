@@ -21,7 +21,7 @@ const HANDLERS = {
     try {
       const data = yield call(fetchData)
       const pokes = data.map(item => {
-        return [item.name, item.sprites.front_default ]
+        return {name: item.name, icon: item.sprites.front_default}
       })
       yield put(actions.getPokesSuccess(pokes))
     } catch (error) {

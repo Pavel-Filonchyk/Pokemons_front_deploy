@@ -4,7 +4,7 @@ import { getPokesDataSuccess } from '../actions/getPokesDataAction'
 
 export const getPokes = {
   pokesData: [],
-  pokes: [],
+  pokes: null,
 }
 
 const HANDLERS = {
