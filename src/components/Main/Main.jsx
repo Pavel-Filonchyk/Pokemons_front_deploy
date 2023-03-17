@@ -78,9 +78,9 @@ export default function Main() {
 
   const dataSource = pokemons?.map(items => {
     return {
-      key: items[0],
-      name: items[0],
-      icon: <img src={`${items[1]}`} alt=""/>,
+      key: items.name,
+      name: items.name,
+      icon: <img src={`${items.icon}`} alt=""/>,
       star: <StarOutlined />
     }
   })
